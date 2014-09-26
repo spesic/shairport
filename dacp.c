@@ -89,8 +89,6 @@ static void print_one(const char *name, const char *value) {
    print_one(#name, player_dacp.name)
 
 void dacp_write(void) {
-    int ret;
-
     // readers may go away and come back
     if (fd < 0)
         dacp_open();
