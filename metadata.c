@@ -89,8 +89,6 @@ static void print_one(const char *name, const char *value) {
     print_one(#name, player_meta.name)
 
 void metadata_write(void) {
-    int ret;
-
     // readers may go away and come back
     if (fd < 0)
         metadata_open();
@@ -109,9 +107,9 @@ void metadata_write(void) {
     write_one(genre);
     write_one(comment);
 
-    ret = write(fd, "\n", 1);
-    if (ret < 1)    // no reader
-        metadata_close();
+    write_unchecked(fd, "\n", 1);
+    metadata_close();
+
 }
 
 void metadata_cover_image(const char *buf, int len, const char *ext) {
