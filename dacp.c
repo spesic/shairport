@@ -101,11 +101,10 @@ void dacp_write(void) {
         return;
 
     dirty = 0;
-    
+
     write_one(dacp_id);
 	write_one(active_remote);
 
-    ret = write(fd, "\n", 1);
-    if (ret < 1)    // no reader
-        dacp_close();
+    write_unchecked(fd, "\n", 1);
+    dacp_close();
 }
