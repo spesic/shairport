@@ -38,7 +38,6 @@
 #include "mdns.h"
 #include "getopt_long.h"
 #include "metadata.h"
-#include "dacp.h"
 
 static const char *version =
     #include "version.h"
@@ -108,7 +107,6 @@ void usage(char *progname) {
     printf("    -E, --on-stop=COMMAND   run a shell command when playback ends\n");
     printf("    -w, --wait-cmd          block while the shell command(s) run\n");
     printf("    -M, --meta-dir=DIR      set a directory to write metadata and album cover art to\n");
-    printf("    -D, --dacp-dir=DIR      set a directory to write DACP remote control info to\n");
 
     printf("    -o, --output=BACKEND    select audio output method\n");
     printf("    -m, --mdns=BACKEND      force the use of BACKEND to advertise the service\n");
@@ -140,7 +138,6 @@ int parse_options(int argc, char **argv) {
         {"wait-cmd",  no_argument,        NULL, 'w'},
         {"meta-dir",  required_argument,  NULL, 'M'},
         {"mdns",      required_argument,  NULL, 'm'},
-        {"dacp-dir",  required_argument,  NULL, 'D'},
         {NULL,        0,                  NULL,   0}
     };
 
@@ -199,9 +196,6 @@ int parse_options(int argc, char **argv) {
                 break;
             case 'm':
                 config.mdns_name = optarg;
-                break;
-            case 'D':
-                config.dacp_dir = optarg;
                 break;
         }
     }
@@ -320,9 +314,6 @@ int main(int argc, char **argv) {
 
     if (config.meta_dir)
         metadata_open();
-
-    if (config.dacp_dir)
-	    dacp_open();
 
     rtsp_listen_loop();
 

@@ -4,6 +4,8 @@
 #include <stdio.h>
 
 typedef struct {
+    char *dacp_id;
+    char *active_remote;
     char *artist;
     char *title;
     char *album;

@@ -100,6 +100,8 @@ void metadata_write(void) {
 
     dirty = 0;
 
+    write_one(dacp_id);
+    write_one(active_remote);
     write_one(artist);
     write_one(title);
     write_one(album);
@@ -109,7 +111,6 @@ void metadata_write(void) {
 
     write_unchecked(fd, "\n", 1);
     metadata_close();
-
 }
 
 void metadata_cover_image(const char *buf, int len, const char *ext) {

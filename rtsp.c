@@ -46,7 +46,6 @@
 #include "rtp.h"
 #include "mdns.h"
 #include "metadata.h"
-#include "dacp.h"
 
 #ifdef AF_INET6
 #define INETx_ADDRSTRLEN INET6_ADDRSTRLEN
@@ -608,12 +607,11 @@ static void handle_announce(rtsp_conn_info *conn,
     int c;
     for (c = 0; c < req->nheaders; c++) {
         if (!strcmp(req->name[c], "DACP-ID")) {
-            dacp_set(&player_dacp.dacp_id, req->value[c]);
+            metadata_set(&player_meta.dacp_id, req->value[c]);
         } else if (!strcmp(req->name[c], "Active-Remote")) {
-            dacp_set(&player_dacp.active_remote, req->value[c]);
+            metadata_set(&player_meta.active_remote, req->value[c]);
         }
     }
-    dacp_write();
 
     resp->respcode = 200;
 }
