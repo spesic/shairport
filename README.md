@@ -59,6 +59,8 @@ Metadata
 
 The following metadata can be output for the currently playing track:
 
+  * dacp_id
+  * active_remote
   * artist
   * title
   * album
@@ -68,27 +70,26 @@ The following metadata can be output for the currently playing track:
 
 To enable the output of metadata, the `-M <directory name>` flag must be set to
 instruct `shairport` where to save the output. This directory must exist. A
-fifo named `now_playing` will be created, and records will be written to it
+FIFO named `now_playing` will be created, and records will be written to it
 when tracks are changed. The end of a set of metadata is delimited by a
 zero-length line. Cover filenames are relative to the cover directory. Files
 are not deleted.
 
 An example::
-
+    dacp_id=CFAE09D9DA7527E9
+    active_remote=3951361179
     artist=Arcade Fire
     title=City With No Children
     album=The Suburbs
     artwork=cover-e6450a45ab900815e831434f5ee0499c.jpg
     genre=Rock
     comment=
-    
+
 DACP
 ----
-Most devices allow the AirPlay receiver to have basic remote control over the stream. This is done via simple HTTP GET requests from the 
+Most devices allow the AirPlay receiver to have basic remote control over the stream. This is done via simple HTTP GET requests from the
 receiver to the source device. The device sends a `DACP-ID` header to allow the receiver to find hostname and port numbers from mDNS, as well as an
-`Active-Remote` header that must be used as an authentication key for issuing control commands. Similar to the Metadata feature outlined above,
-this information can be read from a fifo after a device announces an audio stream. Using the `-D <directory name>` flag will cause a fifo named
-`dacp` to be created in the directory specified. This fifo will have a similar format as the metadata.
+`Active-Remote` header that must be used as an authentication key for issuing control commands. This information can be read from a Metadata FIFO (now_playing) after a device announces an audio stream.
 
 Fields:
 ```
@@ -97,7 +98,7 @@ active_remote=3951361179
 ```
 
 To issue control commands, you must do an mDNS lookup for `iTunes_Ctrl_<dacp_id>._dacp._tcp.local`. iTunes will always advertise on port 3689 so depending
-on the environment, it may be possible to skip the mDNS lookup if you already know the source IP or hostname. iOS devices seem to choose a random high-numbered 
+on the environment, it may be possible to skip the mDNS lookup if you already know the source IP or hostname. iOS devices seem to choose a random high-numbered
 port. Once you have found the host and port number, you may issue HTTP GET requests in the following format:
 
 `http://<hostname>:<port>/ctrl-int/1/<cmd>`
@@ -118,7 +119,7 @@ shuffle_songs
 volumedown
 volumeup
 ```
-Your HTTP request must include an `Active-Remote` header with the value obtained from the fifo.
+Your HTTP request must include an `Active-Remote` header with the value obtained from the FIFO.
 
 
 Thanks
